@@ -18,9 +18,12 @@ current_state = "S"
 chain = ""
 input_string = input()
 run = True
-
+global_complete = False
 for i in range(len(input_string)):
     symbol = input_string[i]
+    if symbol not in "1234":
+        print("не подходит, так как введен недопустимый символ")
+        exit(0)
     if current_state == "S":
         run = processing(symbol, {"1": "B", "3": "A"})
     elif current_state == "A":
@@ -29,9 +32,13 @@ for i in range(len(input_string)):
         run = processing(symbol, {"1": "Z", "3": "B"})
     elif current_state == "Z":
         run = processing(symbol, {"2": "A", "4": "B"})
+        global_complete = True
     if not run:
-        print("не подходит")
+        print("не подходит, так как нет выхода из дуги")
         exit(0)
+if not global_complete:
+    print("не подходит, так как не достигнуто конечное состояние")
+    exit(0)
 
 print("подходит")
 
