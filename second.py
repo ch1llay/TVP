@@ -22,15 +22,14 @@ run = True
 for i in range(len(input_string)):
     symbol = input_string[i]
     print(chain)
-    match current_state:
-        case "S":
-            run = processing(symbol, {"1": "B", "3": "A"})
-        case "A":
-            run = processing(symbol, {"2": "A", "4": "Z"})
-        case "B":
-            run = processing(symbol, {"1": "Z", "3": "B"})
-        case "Z":
-            run = processing(symbol, {"2": "A", "4": "B"})
+    if current_state == "S":
+        run = processing(symbol, {"1": "B", "3": "A"})
+    elif current_state == "A":
+        run = processing(symbol, {"2": "A", "4": "Z"})
+    elif current_state == "B":
+        run = processing(symbol, {"1": "Z", "3": "B"})
+    elif current_state == "Z":
+        run = processing(symbol, {"2": "A", "4": "B"})
     if not run:
         print("не подходит")
         exit(0)
