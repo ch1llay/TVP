@@ -1,25 +1,39 @@
-current_state = "S"
-
-
-def processing(symbol, data: dict):
+def processing(symbol, data: dict) -> bool:
     global current_state, chain
+    print(current_state, end="->")
+    is_complete = False
     for smbl, _state in data.items():
         if smbl == symbol:
+            is_complete = True
             current_state = _state
             chain += smbl
             print(current_state, chain)
+    if not is_complete:
+        return False
+    else:
+        return True
 
 
+current_state = "S"
 chain = ""
-while True:
-    symbol = input()
-    print(current_state, end="->")
+input_string = input()
+run = True
+
+for i in range(len(input_string)):
+    symbol = input_string[i]
+    print(chain)
     match current_state:
         case "S":
-            processing(symbol, {"1": "B", "3": "A"})
+            run = processing(symbol, {"1": "B", "3": "A"})
         case "A":
-            processing(symbol, {"2": "A", "4": "Z"})
+            run = processing(symbol, {"2": "A", "4": "Z"})
         case "B":
-            processing(symbol, {"1": "Z", "3": "B"})
+            run = processing(symbol, {"1": "Z", "3": "B"})
         case "Z":
-            processing(symbol, {"2": "A", "4": "B"})
+            run = processing(symbol, {"2": "A", "4": "B"})
+    if not run:
+        print("не подходит")
+        exit(0)
+
+print("подходит")
+
