@@ -21,7 +21,6 @@ run = True
 
 for i in range(len(input_string)):
     symbol = input_string[i]
-    print(chain)
     if current_state == "S":
         run = processing(symbol, {"1": "B", "3": "A"})
     elif current_state == "A":
