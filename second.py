@@ -17,6 +17,9 @@ def processing(symbol, data: dict) -> bool:
 current_state = "S"
 chain = ""
 input_string = input()
+if len(input_string) == 0:
+    print("введена пустая строка")
+    exit(0)
 run = True
 global_complete = False
 for i in range(len(input_string)):
@@ -34,7 +37,7 @@ for i in range(len(input_string)):
         run = processing(symbol, {"2": "A", "4": "B"})
         global_complete = True
     if not run:
-        print("не подходит, так как нет выхода из дуги")
+        print("не подходит, так как нет перехода")
         exit(0)
 if not global_complete:
     print("не подходит, так как не достигнуто конечное состояние")
