@@ -44,7 +44,7 @@ for i in range(len(input_string)):
     elif current_state == "K":
         run = processing(symbol, {"5":"C"})
     elif current_state == "E":
-        run = processing(symbol, {"6":"E"})
+        run = processing(symbol, {"6":"C"})
     if not run:
         print("не подходит, так как нет перехода")
         exit(0)
