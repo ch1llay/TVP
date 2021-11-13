@@ -21,7 +21,6 @@ if len(input_string) == 0:
     print("введена пустая строка")
     exit(0)
 run = True
-global_complete = False
 for i in range(len(input_string)):
     symbol = input_string[i]
     if symbol not in "56":
@@ -35,10 +34,8 @@ for i in range(len(input_string)):
         run = processing(symbol, {"6":"C"})
     elif current_state == "C":
         run = processing(symbol, {"6":"GD"})
-        global_complete = True
     elif current_state == "GD":
         run = processing(symbol, {"5":"MF"})
-        global_complete = False
     elif current_state == "MF":
         run = processing(symbol, {"6":"K", "5":"E"})
     elif current_state == "K":
@@ -48,7 +45,7 @@ for i in range(len(input_string)):
     if not run:
         print("не подходит, так как нет перехода")
         exit(0)
-if not global_complete:
+if current_state != "C":
     print("не подходит, так как не достигнуто конечное состояние")
     exit(0)
 
