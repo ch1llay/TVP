@@ -25,7 +25,7 @@ import string
 import re
 
 class _:
-    literals = []
+    literals = ["a"]
     def var_declaration(self, s:str) -> str:
 
         if ";" not in s:
@@ -72,17 +72,22 @@ class _:
         # b = 1;
         # c = 10;
         # a = (((b)c) + (b-c))/(c+b)-(c-b))/100 + 1
-        expression.replace(' ', '')
-        literal, expression = expression.split("=")[0]
+        expression = expression.replace(' ', '')
+        try:
+            literal, expression = expression.split("=")
+        except:
+            print("ошибка присвоения (требуется равно)")
+            exit(0)
         if literal not in self.literals:
             print("в присвоении должны использоваться только объявленные переменные")
             exit(0)
-        if expression.count("(") != expression(")"):
-            print("ошибка, проверьте правильность скобок")
-            exit(0)
+        if "(" in expression or ")" in expression:
+            if expression.count("(") != expression(")"):
+                print("ошибка, проверьте правильность скобок")
+                exit(0)
 
         operator_indexes = []
-        for i in len(expression):
+        for i in range(len(expression)):
             if expression[i] in ['+', '-', '/']:
                 operator_indexes.append(i)
         for i in operator_indexes:
@@ -96,13 +101,20 @@ class _:
             if re.fullmatch(r"\d+|[a-zA-Z]+", expression[i+1]) == None:
                 print("ошибка выражения")
                 exit(0)
-        expression = expression.replace("+", '')
-        expression = expression.replace("-", '')
-        expression = expression.replace("/", '')
+        # expression = expression.replace("+", '')
+        # expression = expression.replace("-", '')
+        # expression = expression.replace("/", '')
+        print(expression)
         for c in expression:
             if re.fullmatch(r"/d", c) == None:
                 if re.fullmatch(r"(_|([a-zA-Z]|\d))+", c) == None:
                     print("некорректное название переменной")
+        for w in expression.split():
+            print(w)
+            if re.fullmatch(r"/d", w) == None:
+                if w not in self.literals:
+                    print("ошибка переменной")
+                    exit(0)
 
 
 
@@ -128,10 +140,9 @@ class _:
 
 
 
-# shop_machine = _()
+shop_machine = _()
+shop_machine.check_expression(input())
 # shop_machine.var_declaration(input())
-
-eval(input())
 
 
 
