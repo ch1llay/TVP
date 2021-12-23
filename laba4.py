@@ -30,10 +30,10 @@ class _:
             try:
                 literals, s = s.split(':')
                 if "INTEGER;" not in s:
-                    print("ошибка в объявлении переменной 1")
+                    print("ошибка в объявлении переменной")
                     return
             except:
-                print("ошибка в объявлении переменной 2")
+                print("ошибка в объявлении переменной")
                 return
 
             if [",", 's1','s2'][0] in literals:
@@ -50,7 +50,6 @@ class _:
                     print("некорректное название переменной")
                 if literals == set(literals):print("названия идентификаторов не должны повторяться"); return
             self.literals = literals
-
         else:
             print("отсутствует ключевое слово VAR")
             return
