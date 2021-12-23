@@ -19,7 +19,7 @@ import string
 import re
 
 
-class _:
+class O:
     literals = ["a", "ab1", 'kva']
 
     def var_declaration(self, s: str) -> str:
@@ -47,10 +47,14 @@ class _:
             print(literals)
             for l in literals:
                 print(f"'{l}'")  # показ переменных
-                if len(l) > 11: print("Идентификаторы должны быть не длиннее 11 символов"); exit(0)
+                if len(l) > 11:
+                    print("Идентификаторы должны быть не длиннее 11 символов")
+                    exit(0)
                 if re.fullmatch(r"(_|([a-zA-Z]|\d))+", l) == None:
                     print("некорректное название переменной")
-                if literals == set(literals): print("названия идентификаторов не должны повторяться"); exit(0)
+                if literals == set(literals):
+                    print("названия идентификаторов не должны повторяться")
+                    exit(0)
             self.literals = literals
         else:
             print("отсутствует ключевое слово VAR")
@@ -65,17 +69,15 @@ class _:
             return False
 
     def check_expression(self, expression: str):
-        # a = a + a
-        # b = 1;
-        # c = 10;
-        # a = (((b)c) + (b-c))/(c+b)-(c-b))/100 + 1
         try:
+            print(expression, 100)
             literal, expression = expression.split("=")
             literal = literal.replace(" ", '')
             expression = expression.replace(" ", '')
             print(literal)
-        except:
-            print("ошибка присвоения (требуется равно)")
+        except Exception as e:
+            print(e)
+            print("ошибка присвоения (требуется равно) 1")
             exit(0)
         print(f"'{literal}'")
         if literal not in self.literals:
@@ -147,11 +149,17 @@ class _:
         # + - / для цифр
 
     def main_part(self, s):
+        if "BEGIN" not in s:
+            print("ошибка синтаксиса")
+            exit(0)
         _, expressions = s.split("BEGIN")
-        for expr in expressions.split(";"):
+        if expressions[-3:] != "END":
+            print("ошибка синтаксиса 1")
+            exit(0)
+        for expr in expressions.split(";")[1:]:
+            print(expr)
             self.check_expression(expr)
 
 
-shop_machine = _()
-shop_machine.check_expression(input())
-# shop_machine.var_declaration(input())
+shop_machine = O()
+shop_machine.var_declaration(input())
