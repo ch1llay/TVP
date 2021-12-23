@@ -2,36 +2,32 @@
 
 
 # отделение до первой   ;
-    # [var]    <ident> : INTEGER(7)
-    # <indent> _букваЦифра,  между литералами должна быть запятая, "а а,"
-    # <ident> не более 11 символов
-    # проверить кол-во символов между запятой и запятой (если запятая присутсвует)
-    # не начинается и не заканчивается запятой)
-    # после идентификатора должно идти :
-    # после var минимум один пробел +
+# [var]    <ident> : INTEGER(7)
+# <indent> _букваЦифра,  между литералами должна быть запятая, "а а,"
+# <ident> не более 11 символов
+# проверить кол-во символов между запятой и запятой (если запятая присутсвует)
+# не начинается и не заканчивается запятой)
+# после идентификатора должно идти :
+# после var минимум один пробел +
 
 
-    # начинается BEGIN заканчивается END
-
-
-
-
-
-
+# начинается BEGIN заканчивается END
 
 
 # VAR aboba, aboba1:INTEGER;Begin
 import string
 import re
 
+
 class _:
-    literals = ["a"]
-    def var_declaration(self, s:str) -> str:
+    literals = ["a", "ab1", 'kva']
+
+    def var_declaration(self, s: str) -> str:
 
         if ";" not in s:
             print("отсутствует точка с запятой")
             exit(0)
-        if s[:3].lower() == "var":
+        if s[:4].lower() == "var ":
             s = s[3:]
             try:
                 literals, s = s.split(':')
@@ -42,7 +38,7 @@ class _:
                 print("ошибка в объявлении переменной")
                 exit(0)
 
-            if [",", 's1','s2'][0] in literals:
+            if [",", 's1', 's2'][0] in literals:
                 literals = literals.split(",")
 
                 literals = [l.strip(" ") for l in literals]
@@ -50,11 +46,11 @@ class _:
                 literals = [literals.strip("")]
             print(literals)
             for l in literals:
-                print(f"'{l}'") # показ переменных
-                if len(l) > 11:print("Идентификаторы должны быть не длиннее 11 символов"); exit(0)
+                print(f"'{l}'")  # показ переменных
+                if len(l) > 11: print("Идентификаторы должны быть не длиннее 11 символов"); exit(0)
                 if re.fullmatch(r"(_|([a-zA-Z]|\d))+", l) == None:
                     print("некорректное название переменной")
-                if literals == set(literals):print("названия идентификаторов не должны повторяться"); exit(0)
+                if literals == set(literals): print("названия идентификаторов не должны повторяться"); exit(0)
             self.literals = literals
         else:
             print("отсутствует ключевое слово VAR")
@@ -67,22 +63,26 @@ class _:
             return True
         except:
             return False
-    def check_expression(self, expression:str):
+
+    def check_expression(self, expression: str):
         # a = a + a
         # b = 1;
         # c = 10;
         # a = (((b)c) + (b-c))/(c+b)-(c-b))/100 + 1
-        expression = expression.replace(' ', '')
         try:
             literal, expression = expression.split("=")
+            literal = literal.replace(" ", '')
+            expression = expression.replace(" ", '')
+            print(literal)
         except:
             print("ошибка присвоения (требуется равно)")
             exit(0)
+        print(f"'{literal}'")
         if literal not in self.literals:
             print("в присвоении должны использоваться только объявленные переменные")
             exit(0)
         if "(" in expression or ")" in expression:
-            if expression.count("(") != expression(")"):
+            if expression.count("(") != expression.count(")"):
                 print("ошибка, проверьте правильность скобок")
                 exit(0)
 
@@ -91,40 +91,51 @@ class _:
             if expression[i] in ['+', '-', '/']:
                 operator_indexes.append(i)
         for i in operator_indexes:
-            if expression[i] != '-':
+            if expression[i] == '-':
+
+                if re.fullmatch(r"\(|\)|\d+|[a-zA-Z]+", expression[i - 1]) == None:
+                    print("ошибка выражения 3")
+                    exit(0)
+                if re.fullmatch(r"\(|\(|\d+|[a-zA-Z]+", expression[i + 1]) == None:
+                    print("ошибка выражения 4")
+                    exit(0)
+
+            else:
                 if i == 0:
                     print("ошибка выражения")
                     exit(0)
-            if re.fullmatch(r"\d+|[a-zA-Z]+", expression[i-1]) == None:
-                print("ошибка выражения")
-                exit(0)
-            if re.fullmatch(r"\d+|[a-zA-Z]+", expression[i+1]) == None:
-                print("ошибка выражения")
-                exit(0)
+                if re.fullmatch(r"\)|\d+|[a-zA-Z]+", expression[i - 1]) == None:
+                    print(i, expression[i])
+                    print("ошибка выражения 1")
+                    exit(0)
+                if re.fullmatch(r"\(|\d+|[a-zA-Z]+", expression[i + 1]) == None:
+                    print("ошибка выражения 2")
+                    exit(0)
+                # a = -(ab1 + 20) / kva - 10
+
         # expression = expression.replace("+", '')
         # expression = expression.replace("-", '')
         # expression = expression.replace("/", '')
-        print(expression)
-        for c in expression:
-            if re.fullmatch(r"/d", c) == None:
-                if re.fullmatch(r"(_|([a-zA-Z]|\d))+", c) == None:
-                    print("некорректное название переменной")
-        for w in expression.split():
+        print("expression ", expression)
+
+        i = 0
+        words = []
+        while i < len(expression):
+            if re.fullmatch(r"\d|[a-zA-Z]", expression[i]) != None:
+                j = i + 1
+                while j < len(expression) and expression[j] not in "+-/()":
+                    j += 1
+                words.append(expression[i:j])
+                i = j-1
+            i += 1
+        print(words)
+        for w in words:
             print(w)
-            if re.fullmatch(r"/d", w) == None:
+            if not w.isnumeric():
                 if w not in self.literals:
-                    print("ошибка переменной")
+                    print("проверьте корректность переменных в выражении")
                     exit(0)
 
-
-
-
-
-
-
-
-        
-        
         # должны использоваться только объявленные переменные
         # начинаться с корректного идентификатора уже объявленной перменной
         # после знак =
@@ -136,27 +147,11 @@ class _:
         # + - / для цифр
 
     def main_part(self, s):
-        pass
-
+        _, expressions = s.split("BEGIN")
+        for expr in expressions.split(";"):
+            self.check_expression(expr)
 
 
 shop_machine = _()
 shop_machine.check_expression(input())
 # shop_machine.var_declaration(input())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
