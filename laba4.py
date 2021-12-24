@@ -1,6 +1,7 @@
 # user_input = input()
 
 
+
 # отделение до первой   ;
 # [var]    <ident> : INTEGER(7)
 # <indent> _букваЦифра,  между литералами должна быть запятая, "а а,"
@@ -23,9 +24,12 @@ class O:
     literals =[]
 
     def var_declaration(self, s: str) -> str:
+        if len(s.strip()) == 0:
+            print("введена пустая строка")
+            exit(0)
         for c in s:
             if c in "<>?.!@#$%^&*":
-                print("ошибка синтаксиса", c)
+                print("ошибка синтаксиса")
                 exit(0)
         if ";" not in s:
             print("отсутствует точка с запятой")
@@ -47,9 +51,7 @@ class O:
                 literals = [l.strip(" ") for l in literals]
             else:
                 literals = [literals.strip("")]
-            print(literals)
             for l in literals:
-                print(f"'{l}'")  # показ переменных
                 if len(l) > 11:
                     print("Идентификаторы должны быть не длиннее 11 символов")
                     exit(0)
@@ -59,7 +61,6 @@ class O:
                 def sort(lst):
                     lst.sort()
                     return lst
-                print("проверка", literals, literals.sort() != list(set(literals)).sort())
                 if sort(literals) != sort(list(set(literals))):
                     print("названия идентификаторов не должны повторяться")
                     exit(0)
@@ -67,7 +68,6 @@ class O:
         else:
             print("отсутствует ключевое слово VAR")
             exit(0)
-        print("main part")
         self.main_part(';'.join(s.split(";")[1:]))
 
     def check_correct_math(self, exp):
@@ -79,18 +79,14 @@ class O:
 
     def check_expression(self, expression: str):
         try:
-            print(expression, 100)
             literal, expression = expression.split("=")
             literal = literal.replace(" ", '')
             expression = expression.replace(" ", '')
-            print(literal)
         except Exception as e:
-            print(e)
-            print("ошибка присвоения (требуется равно) 1")
+            print("ошибка выражения")
             exit(0)
-        print(f"'{literal}'")
         if literal not in self.literals:
-            print("в присвоении должны использоваться только объявленные переменные")
+            print("ошибка выражения")
             exit(0)
         if "(" in expression or ")" in expression:
             if expression.count("(") != expression.count(")"):
@@ -105,10 +101,10 @@ class O:
             if expression[i] == '-':
 
                 if re.fullmatch(r"\(|\)|\d+|[a-zA-Z]+", expression[i - 1]) == None:
-                    print("ошибка выражения 3")
+                    print("ошибка выражения")
                     exit(0)
                 if re.fullmatch(r"\(|\(|\d+|[a-zA-Z]+", expression[i + 1]) == None:
-                    print("ошибка выражения 4")
+                    print("ошибка выражения")
                     exit(0)
 
             else:
@@ -117,18 +113,11 @@ class O:
                     exit(0)
                 if re.fullmatch(r"\)|\d+|[a-zA-Z]+", expression[i - 1]) == None:
                     print(i, expression[i])
-                    print("ошибка выражения 1")
+                    print("ошибка выражения")
                     exit(0)
                 if re.fullmatch(r"\(|\d+|[a-zA-Z]+", expression[i + 1]) == None:
-                    print("ошибка выражения 2")
+                    print("ошибка выражения")
                     exit(0)
-                # a = -(ab1 + 20) / kva - 10
-
-        # expression = expression.replace("+", '')
-        # expression = expression.replace("-", '')
-        # expression = expression.replace("/", '')
-        print("expression ", expression)
-
         i = 0
         words = []
         while i < len(expression):
@@ -139,9 +128,7 @@ class O:
                 words.append(expression[i:j])
                 i = j-1
             i += 1
-        print(words)
         for w in words:
-            print(w)
             if not w.isnumeric():
                 if w not in self.literals:
                     print("проверьте корректность переменных в выражении")
@@ -168,12 +155,10 @@ class O:
         expressions = expressions[:-3]
         # expressions = expressions.rstrip(" ")
         #expressions = expressions.replace(" ", '')
-        print(expressions, 162)
-        print(expressions.split(";"))
         for expr in expressions.split(";"):
             if expr not in ' ':
-                print(expr)
                 self.check_expression(expr)
+        print("программа корректна")
 
 
 shop_machine = O()
