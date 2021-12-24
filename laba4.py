@@ -24,7 +24,7 @@ class O:
 
     def var_declaration(self, s: str) -> str:
         for c in s:
-            if c in "!@#$%^&*":
+            if c in "<>?.!@#$%^&*":
                 print("ошибка синтаксиса", c)
                 exit(0)
         if ";" not in s:
@@ -56,7 +56,11 @@ class O:
                 if re.fullmatch(r"(_|([a-zA-Z]|\d))+", l) == None:
                     print("некорректное название переменной")
                     exit(0)
-                if literals == set(literals):
+                def sort(lst):
+                    lst.sort()
+                    return lst
+                print("проверка", literals, literals.sort() != list(set(literals)).sort())
+                if sort(literals) != sort(list(set(literals))):
                     print("названия идентификаторов не должны повторяться")
                     exit(0)
             self.literals = literals
