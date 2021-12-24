@@ -66,7 +66,7 @@ class O:
                     exit(0)
             self.literals = literals
         else:
-            print("отсутствует ключевое слово VAR")
+            print("ошибка объявления переменных")
             exit(0)
         self.main_part(';'.join(s.split(";")[1:]))
 
@@ -112,7 +112,6 @@ class O:
                     print("ошибка выражения")
                     exit(0)
                 if re.fullmatch(r"\)|\d+|[a-zA-Z]+", expression[i - 1]) == None:
-                    print(i, expression[i])
                     print("ошибка выражения")
                     exit(0)
                 if re.fullmatch(r"\(|\d+|[a-zA-Z]+", expression[i + 1]) == None:
@@ -150,11 +149,9 @@ class O:
             exit(0)
         _, expressions = s.split("BEGIN")
         if expressions[-3:] != "END":
-            print("ошибка синтаксиса 1")
+            print("ошибка синтаксиса")
             exit(0)
         expressions = expressions[:-3]
-        # expressions = expressions.rstrip(" ")
-        #expressions = expressions.replace(" ", '')
         for expr in expressions.split(";"):
             if expr not in ' ':
                 self.check_expression(expr)
