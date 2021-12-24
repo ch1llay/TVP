@@ -20,10 +20,13 @@ import re
 
 
 class O:
-    literals = ["a", "ab1", 'kva']
+    literals =[]
 
     def var_declaration(self, s: str) -> str:
-
+        for c in s:
+            if c in "!@#$%^&*":
+                print("ошибка синтаксиса", c)
+                exit(0)
         if ";" not in s:
             print("отсутствует точка с запятой")
             exit(0)
@@ -52,6 +55,7 @@ class O:
                     exit(0)
                 if re.fullmatch(r"(_|([a-zA-Z]|\d))+", l) == None:
                     print("некорректное название переменной")
+                    exit(0)
                 if literals == set(literals):
                     print("названия идентификаторов не должны повторяться")
                     exit(0)
@@ -59,7 +63,8 @@ class O:
         else:
             print("отсутствует ключевое слово VAR")
             exit(0)
-        self.main_part(''.join(s.split(";")[1:]))
+        print("main part")
+        self.main_part(';'.join(s.split(";")[1:]))
 
     def check_correct_math(self, exp):
         try:
@@ -156,9 +161,15 @@ class O:
         if expressions[-3:] != "END":
             print("ошибка синтаксиса 1")
             exit(0)
-        for expr in expressions.split(";")[1:]:
-            print(expr)
-            self.check_expression(expr)
+        expressions = expressions[:-3]
+        # expressions = expressions.rstrip(" ")
+        #expressions = expressions.replace(" ", '')
+        print(expressions, 162)
+        print(expressions.split(";"))
+        for expr in expressions.split(";"):
+            if expr not in ' ':
+                print(expr)
+                self.check_expression(expr)
 
 
 shop_machine = O()
