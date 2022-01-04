@@ -1,21 +1,3 @@
-# user_input = input()
-
-
-
-# отделение до первой   ;
-# [var]    <ident> : INTEGER(7)
-# <indent> _букваЦифра,  между литералами должна быть запятая, "а а,"
-# <ident> не более 11 символов
-# проверить кол-во символов между запятой и запятой (если запятая присутсвует)
-# не начинается и не заканчивается запятой)
-# после идентификатора должно идти :
-# после var минимум один пробел +
-
-
-# начинается BEGIN заканчивается END
-
-
-# VAR aboba, aboba1:INTEGER;Begin
 import string
 import re
 
@@ -23,7 +5,7 @@ import re
 class O:
     literals =[]
 
-    def var_declaration(self, s: str) -> str:
+    def read_string(self, s: str) -> str:
         if len(s.strip()) == 0:
             print("введена пустая строка")
             exit(0)
@@ -41,7 +23,7 @@ class O:
                 if "INTEGER;" not in s:
                     print("ошибка в объявлении переменной")
                     exit(0)
-            except:
+            except Exception as e:
                 print("ошибка в объявлении переменной")
                 exit(0)
 
@@ -65,7 +47,9 @@ class O:
                     print("названия идентификаторов не должны повторяться")
                     exit(0)
             self.literals = literals
+            s1 = "S1"
         else:
+            s2 = "s2"
             print("ошибка объявления переменных")
             exit(0)
         self.main_part(';'.join(s.split(";")[1:]))
@@ -133,16 +117,6 @@ class O:
                     print("проверьте корректность переменных в выражении")
                     exit(0)
 
-        # должны использоваться только объявленные переменные
-        # начинаться с корректного идентификатора уже объявленной перменной
-        # после знак =
-        # после (), (унарный -) существующий корректный идентификатор, + - /
-        # количество открывающихся скобочек должно быть равно количеству закрывающих скобочек
-        # + строго между переменными | (переменной и скобкой)->(a+(a/b)->(a/b)+a) | (выражение1) + (выражение2) ...
-        # - перед переменными | перед открывающей скобкой | (переменной и скобкой) | (выражение1) + (выражение2) ...
-        # / строго между переменными | (переменной и скобкой)->(a/(a/b)->(a/b)/a) | (выражение1) / (выражение2) ...
-        # + - / для цифр
-
     def main_part(self, s):
         if "BEGIN" not in s:
             print("ошибка синтаксиса")
@@ -159,4 +133,11 @@ class O:
 
 
 shop_machine = O()
-shop_machine.var_declaration(input())
+shop_machine.read_string(input())
+
+# VAR a, b, c: INTEGER; BEGIN a = 1; b = 2; c = a; a = (c + b)/a+b+(-c); END корректный
+# VAR a, a, b, c: INTEGER; BEGIN a = 1; b = 2; c = a; a = (c + b)/a+b+(-c); END повторяющиеся переменные
+# VAR a, a, b, c: INTEGER; BEGIN a = 1 b = 2; c = a; a = (c + b)/a+b+(-c); END ошибка синтаксиса
+# VAR a, b, c: INTEGER; BEGIN a = 1; b = 2; c = a; a = (c + b)/a+b+(-c); END
+# VAR a, b, c: INTEGER; BEGIN a = 1; b = 2; c = a; a = (c + b)/a+b+(-c); E
+# VAR a, b, c: INTEG; BEGIN a = 1; b = 2; c = a; a = (c + b)/a+b+(-c); END
